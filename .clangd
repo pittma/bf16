@@ -1,0 +1,2 @@
+CompileFlags:
+    Add: [-I, /home/dpitt/src/cosine-sim/src, -DCLANGD_CONFIG_WORKS]
