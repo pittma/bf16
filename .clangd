@@ -1,0 +1,2 @@
+CompileFlags:
+    Add: [-I, .., -DCLANGD_CONFIG_WORKS]
