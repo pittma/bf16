@@ -1,9 +1,8 @@
-//use std::ffi::c_long;
-//
-// unsafe extern "C" {
-//     fn cosine_sim_asm(a: c_long, b: c_long) -> c_long;
-// }
+use std::ffi::c_float;
 
+unsafe extern "C" {
+    pub fn cosine_sim_asm(a: *const c_float, b: *const c_float, n: usize) -> c_float;
+}
 
 pub fn semantic_impl<const N: usize>(a: [f32; N], b: [f32; N]) -> f32 {
     let mag_f = |acc: f32, v: &f32| v.mul_add(*v, acc);
@@ -37,6 +36,15 @@ mod test {
         assert_eq!(
             super::semantic_impl(ONE_TWO_THREE, ONE_TWO_THREE),
             super::one_pass_impl(ONE_TWO_THREE, ONE_TWO_THREE)
+        );
+    }
+
+    #[test]
+    fn temp_dot_prod() {
+        let x: [f32; 8] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
+        assert_eq!(
+            unsafe { super::cosine_sim_asm(x.as_ptr(), x.as_ptr(), 8) },
+            204.0
         );
     }
 }
