@@ -29,9 +29,12 @@ pub fn one_pass_impl<const N: usize>(a: [f32; N], b: [f32; N]) -> f32 {
 
 #[cfg(test)]
 mod test {
-    const ONE_TO_EIGHT: [f32; 8] = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
-    const RHS: [f32; 8] = [
-        8.938679, 3.701036, 8.291033, 9.767157, 7.0634584, 6.1626635, 3.344915, 4.749503,
+    const ONE_TO_16: [f32; 16] = [
+        1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
+    ];
+    const RHS: [f32; 16] = [
+        8.938679, 3.701036, 8.291033, 9.767157, 7.0634584, 6.1626635, 3.344915, 4.749503, 8.938679,
+        3.701036, 8.291033, 9.767157, 7.0634584, 6.1626635, 3.344915, 4.749503,
     ];
 
     const EPSILON: f32 = 0.0009;
@@ -43,12 +46,12 @@ mod test {
     #[test]
     fn cosine_sim_impls() {
         assert_eq!(
-            super::semantic_impl(ONE_TO_EIGHT, RHS),
-            super::one_pass_impl(ONE_TO_EIGHT, RHS),
+            super::semantic_impl(ONE_TO_16, RHS),
+            super::one_pass_impl(ONE_TO_16, RHS),
         );
         assert!(is_within_range(
-            super::one_pass_impl(ONE_TO_EIGHT, RHS),
-            unsafe { super::cosine_sim_asm(ONE_TO_EIGHT.as_ptr(), RHS.as_ptr(), 8) },
+            super::one_pass_impl(ONE_TO_16, RHS),
+            unsafe { super::cosine_sim_asm(ONE_TO_16.as_ptr(), RHS.as_ptr(), 16) },
         ));
     }
 }
