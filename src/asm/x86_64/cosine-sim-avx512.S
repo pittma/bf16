@@ -1,3 +1,10 @@
+.macro sum_accum reg_a, reg_b
+    vshufps   $0b00001110, \reg_a, \reg_a, \reg_b
+    vaddps    \reg_a, \reg_b, \reg_b
+    vshufps   $0b00000001, \reg_b, \reg_b, \reg_a
+    vaddps    \reg_b, \reg_a, \reg_a
+.endm
+
 .text
 
 .globl  cosine_sim_bf16_avx512
@@ -29,22 +36,13 @@ cosine_sim_bf16_avx512:
   jnz   _cosine_sim_kernel
 
   # magnitude final calc
-  vshufps   $0b00001110, %xmm8, %xmm8, %xmm13
-  vaddps    %xmm8, %xmm13, %xmm13
-  vshufps   $0b00000001, %xmm13, %xmm13, %xmm8
-  vaddps    %xmm13, %xmm8, %xmm8
-  vshufps   $0b00001110, %xmm9, %xmm9, %xmm14
-  vaddps    %xmm9, %xmm14, %xmm14
-  vshufps   $0b00000001, %xmm14, %xmm14, %xmm9
-  vaddps    %xmm14, %xmm9, %xmm9
+  sum_accum %xmm8, %xmm13
+  sum_accum %xmm9, %xmm14
   vmulss    %xmm8, %xmm9, %xmm9
   vsqrtss   %xmm9, %xmm9, %xmm9
 
   # dot prod accum
-  vshufps   $0b00001110, %xmm10, %xmm10, %xmm15
-  vaddps    %xmm10, %xmm15, %xmm15
-  vshufps   $0b00000001, %xmm15, %xmm15, %xmm10
-  vaddps    %xmm15, %xmm10, %xmm10
+  sum_accum %xmm10, %xmm15
 
   # final division
   vdivss    %xmm9, %xmm10, %xmm0
