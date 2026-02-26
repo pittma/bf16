@@ -69,7 +69,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
 #[cfg(test)]
 mod test {
 
-    const EPSILON: f32 = 0.0009;
+    const EPSILON: f32 = 0.0004;
 
     fn is_within_range(a: f32, b: f32) -> bool {
         (a - b).abs() <= EPSILON
