@@ -1,1 +1,4 @@
-cosine-sim-sys/target
+target
+sources/*.le
+sources/.venv
+sources/__pycache__

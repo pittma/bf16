@@ -1,10 +1,11 @@
 [package]
-name = "cosine-sim-sys"
+name = "bf16"
 version = "0.1.0"
 edition = "2024"
 build = "build.rs"
 
 [dependencies]
+thiserror = "2.0.18"
 
 [build-dependencies]
 cc = "1"
